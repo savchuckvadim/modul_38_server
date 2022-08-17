@@ -61,7 +61,8 @@ return [
     |
     */
 
-    'home' => RouteServiceProvider::HOME,
+    // 'home' => RouteServiceProvider::HOME,
+    'home' => env('SPA_URL') . '/start',
 
     /*
     |--------------------------------------------------------------------------

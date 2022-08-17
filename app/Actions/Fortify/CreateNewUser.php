@@ -41,32 +41,12 @@ class CreateNewUser implements CreatesNewUsers
             'surname' => $input['surname'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
-            'followed' => 0
+            'role_id' => $input['role'],
+         
+
             
         ]);
-        // $user->profile->create([
-        //     'name' => $input['name'],
-        //     'surname' => $input['surname'],
-        //     'email' => $input['email'],
-        //     'user_id' => $user->id,
-        // ])->save();
-        // $profilr_contr = new ProfileController;
-        // ProfileController::create($user);
-        // $profile = Profile::create([
-        //     'name' => $input['name'],
-        //     'surname' => $input['surname'],
-        //     'email' => $input['email'],
-        //     'user_id' => $user,
-        //     'hero' => 'url//hero'
-            
-        // ]);
-        // $user->profile()->create([
-        //     'name' => $input['name'],
-        //     'surname' => $input['surname'],
-        //     'email' => $input['email'],
-        //     'user_id' => $user,
-        //     'hero' => 'url//hero'
-        // ]);
+      
         return $user;
     }
 }

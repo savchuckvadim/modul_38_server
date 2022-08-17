@@ -3,9 +3,8 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Support\Facades\Auth;
 
-class PostCollection extends ResourceCollection
+class OfferCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -14,13 +13,13 @@ class PostCollection extends ResourceCollection
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request)
-
     {
-        
-        return [
-            // 'totalCount' =>  $this->collection->count(),
-            'data' =>$this->collection,
+        // return parent::toArray($request);
 
+        return [
+            'resultCode' => 1,
+            'totalCount' =>  $this->collection->count(),
+            'data' => $this->collection,
 
         ];
     }

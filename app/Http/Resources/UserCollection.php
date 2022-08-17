@@ -21,34 +21,20 @@ class UserCollection extends ResourceCollection
         $data = $this->collection->each(function ($item) {
             $currentUser = Auth::user();
             $id = $currentUser->id;
-
+            if(!$item->photo){
+                $item->photo = $item->getAvatarUrl();
+                $item->save();
+            }
            
-
-            for ($i = 0; $i < $item->followers->count(); $i++) {
-                if($item->followers[$i]->id == $id){
-                    $item->followed = 1;
-                };
-               
-            };
-            $photos = [
-                'small'=> $item->getAvatarUrl(),
-                'large' => null
-            ];
-            
-            $item->photos = $photos;
-            return [$item->followers, $item->followeds, $item->profile];
+            return $item;
         });
+    
         return [
-            'resultCode' => 0,
+            'resultCode' => 1,
             'totalCount' =>  $this->collection->count(),
-
-            // 'data' => $result_collection,
             'data' => $data,
 
-
-            // 'links' => [
-            //     'self' => 'link-value',
-            // ]
         ];
+    
     }
 }

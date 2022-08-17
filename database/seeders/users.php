@@ -14,11 +14,7 @@ class users extends Seeder
     function __construct() {
         
     }
-    public $users = [
-        'Kolya',
-        'Petya',
-        'Vasya'
-    ];
+   
     
     /**
      * Run the database seeds.
@@ -40,6 +36,6 @@ class users extends Seeder
     // );
       
 
-      return $user->count(20)->create();
+      return User::factory()->count(20)->create();
     }
 }

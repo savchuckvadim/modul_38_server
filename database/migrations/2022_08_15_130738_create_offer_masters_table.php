@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateViewsTable extends Migration
+class CreateOfferMastersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateViewsTable extends Migration
      */
     public function up()
     {
-        Schema::create('views', function (Blueprint $table) {
+        Schema::create('offer_masters', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignId('post_id');
-            $table->foreignId('author_id');
+            $table->foreignId('master_id');
+            $table->foreignId('offer_id');
+           
         });
     }
 
@@ -28,6 +29,6 @@ class CreateViewsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('views');
+        Schema::dropIfExists('offer_masters');
     }
 }

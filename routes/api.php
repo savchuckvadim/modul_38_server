@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\FollowersController;
+use App\Http\Controllers\LinkController;
+use App\Http\Controllers\OfferController;
+use App\Http\Controllers\OfferMasterController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TokenController;
@@ -49,31 +52,41 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     return $collection;
   });
-  Route::get('/profile/{userId}', function ($userId) {
-    // $user_id = $request->data->userId;
+  // Route::get('/profile/{userId}', function ($userId) {
+  //   // $user_id = $request->data->userId;
 
-    return ProfileController::getProfile($userId);
-  });
+  //   return ProfileController::getProfile($userId);
+  // });
 
 
 
   Route::get('/users/{id}', function ($id) {
     return new UserRecource(User::findOrFail($id));
   });
+
+ 
 });
-
 Route::get('/user/auth', function () {
-
+    
   $authUser = Auth::user();
+ 
   // $id = $auth->id;
   $userResource = null;
   if ($authUser) {
     $userResource = new UserRecource($authUser);
+    return response([
+      'resultCode' => 1,
+      'authUser' => $userResource
+    ], 200);
   }
 
 
-  return $userResource;
+  return response([
+    'resultCode' => 0,
+    'authUser' => null
+  ], 200);
 });
+
 // Route::get('/user/auth', function () {
 //   // if (Auth::user()->data) {
 //   //   return Auth::user()->data;
@@ -96,29 +109,29 @@ Route::get('/user/auth', function () {
 // });
 
 
-Route::post('/follow', function (Request $request) {
-  $currentUserId =  Auth::user()->id;
-  $followedId = $request->userId;
-  return FollowersController::follow($currentUserId, $followedId);
-});
+// Route::post('/follow', function (Request $request) {
+//   $currentUserId =  Auth::user()->id;
+//   $followedId = $request->userId;
+//   return FollowersController::follow($currentUserId, $followedId);
+// });
 
-Route::delete('/follow/{userId}', function (Request $request) {
-  $currentUserId =  Auth::user()->id;
-  $followedId = $request->userId;
-  return FollowersController::unfollow($currentUserId, $followedId);
-});
+// Route::delete('/follow/{userId}', function (Request $request) {
+//   $currentUserId =  Auth::user()->id;
+//   $followedId = $request->userId;
+//   return FollowersController::unfollow($currentUserId, $followedId);
+// });
 
 
-Route::put('/profile/aboutme', function (Request $request) {
-  $aboutMe = $request->aboutMe;
+// Route::put('/profile/aboutme', function (Request $request) {
+//   $aboutMe = $request->aboutMe;
 
-  return ProfileController::updateAboutMe($aboutMe);
-});
-Route::get('/profile/aboutme/{userId}', function ($userId) {
-  // $user_id = $request->data->userId;
+//   return ProfileController::updateAboutMe($aboutMe);
+// });
+// Route::get('/profile/aboutme/{userId}', function ($userId) {
+//   // $user_id = $request->data->userId;
 
-  return ProfileController::getAboutMe($userId);
-});
+//   return ProfileController::getAboutMe($userId);
+// });
 
 
 Route::get('garavatar/{userId}', function ($userId) {
@@ -127,7 +140,35 @@ Route::get('garavatar/{userId}', function ($userId) {
 });
 
 
+///////////////OFFERS
+Route::post('/offer', function (Request $request) {
+  return OfferController::newOffer($request);
+});
 
+Route::get('/offers/{userId}', function ($userId) {
+  return OfferController::getOffer($userId);
+});
+
+Route::delete('/offers/{offerId}', function ($offerId) {
+  return OfferController::deleteOffer($offerId);
+});
+
+Route::post('/follow', function (Request $request) {
+
+ 
+  return  OfferMasterController::follow($request);
+});
+Route::delete('/follow/{offerId}', function ($offerId) {
+
+ 
+  return  OfferMasterController::unfollow($offerId);
+});
+
+Route::get('/link/{offerId}', function ($offerId) {
+
+ 
+  return  LinkController::create($offerId);
+});
 
 
 
@@ -135,49 +176,49 @@ Route::get('garavatar/{userId}', function ($userId) {
 
 
 ///////////////POSTS
-Route::post('/post', function (Request $request) {
-  return PostController::newPost($request);
-});
-Route::get('/post/{profileId}', function ($profileId) {
-  // return PostController::getPosts($profileId);
+// Route::post('/post', function (Request $request) {
+//   return PostController::newPost($request);
+// });
+// Route::get('/post/{profileId}', function ($profileId) {
+//   // return PostController::getPosts($profileId);
 
-  $posts = Post::where('profile_id', $profileId)->get();
-  $paginate = Post::paginate(5);
-  $collection = new PostCollection($posts);
+//   $posts = Post::where('profile_id', $profileId)->get();
+//   $paginate = Post::paginate(5);
+//   $collection = new PostCollection($posts);
 
-  return $collection->values();
-});
+//   return $collection->values();
+// });
 
-Route::put('/post', function (Request $request) {
-  return PostController::updatePost($request);
-});
+// Route::put('/post', function (Request $request) {
+//   return PostController::updatePost($request);
+// });
 
-Route::post('/like', function (Request $request) {
-  $like = new Like;
-  $like->post_id = $request->postId;
-  $like->author_id = Auth::user()->id;
-  $like->save();
+// Route::post('/like', function (Request $request) {
+//   $like = new Like;
+//   $like->post_id = $request->postId;
+//   $like->author_id = Auth::user()->id;
+//   $like->save();
 
-  return response(([
-    'like' => $like,
-    'resultCode' => 1
-  ]
-  ));
-});
+//   return response(([
+//     'like' => $like,
+//     'resultCode' => 1
+//   ]
+//   ));
+// });
 
-Route::delete('/like/{postId}', function ($postId) {
-  $authUserId = Auth::user()->id;
-  $postsLikes = Like::where('post_id', $postId);
-  $like = $postsLikes->where('author_id', $authUserId);
-  $like->delete();
-  $result = Like::where('post_id', $postId);
+// Route::delete('/like/{postId}', function ($postId) {
+//   $authUserId = Auth::user()->id;
+//   $postsLikes = Like::where('post_id', $postId);
+//   $like = $postsLikes->where('author_id', $authUserId);
+//   $like->delete();
+//   $result = Like::where('post_id', $postId);
 
-  return response(([
-    'removedLike' => $like,
-    'resultCode' => 1
-  ]
-  ));
-});
+//   return response(([
+//     'removedLike' => $like,
+//     'resultCode' => 1
+//   ]
+//   ));
+// });
 ////////////////////
 
 

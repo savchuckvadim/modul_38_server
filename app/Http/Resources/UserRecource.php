@@ -19,25 +19,28 @@ class UserRecource extends JsonResource
       
         $currentUser = Auth::user();
         $id = $currentUser->id;
-        for ($i = 0; $i < $this->followers->count(); $i++) {
-            if($this->followers[$i]->id == $id){
-                $this->followed = 1;
-            };
+       
+        // // for ($i = 0; $i < $this->followers->count(); $i++) {
+        // //     if($this->followers[$i]->id == $id){
+        // //         $this->followed = 1;
+        // //     };
            
-        };
+        // // };
+        // $photo =  $this->getAvatarUrl();
+        
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'surname' => $this->surname,
             'email' => $this->email,
-            'followeds' => $this->followeds,
-            'followers' => $this->followers,
-            'followed' =>  $this->followed,
-            'profile' => $this->profile,
-           'postsCount' => $this->posts->count(),
-           'photos' => [
-            'small' => null,
-            'large' => null
-           ]
+            'role' => $this->role->name,
+            '$currentUser' =>$currentUser,
+            // 'followeds' => $this->followeds,
+            // 'followers' => $this->followers,
+            // 'followed' =>  $this->followed,
+            // 'profile' => $this->profile,
+        //    'postsCount' => $this->posts->count(),
+           'photo' => $this->photo 
             // 'created_at' => $this->created_at,
             // 'updated_at' => $this->updated_at,
         ];
@@ -46,7 +49,7 @@ class UserRecource extends JsonResource
     public function with($request)
     {
         return [
-            'resultCode' => 0,
+            'resultCode' => 1,
 
             'links' => [
                 'self' => 'link-value',

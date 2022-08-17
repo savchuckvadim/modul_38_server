@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Followers;
 use Illuminate\Database\Seeder;
 
-class FollowersSeeder extends Seeder
+class OfferMasterSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,8 +13,6 @@ class FollowersSeeder extends Seeder
      */
     public function run()
     {
-        Followers::factory()
-        ->count(20)
-        ->create();
+        //
     }
 }
