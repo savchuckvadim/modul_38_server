@@ -9,4 +9,8 @@ class Link extends Model
 {
     use HasFactory;
 
+    public function offer(){
+        return $this->belongsTo(Offer::class);
+    }
+
 }

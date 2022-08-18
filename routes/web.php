@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\LinkController;
+use App\Models\Link;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +17,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/link/{linkId}', function ($linkId) {
+    $url = LinkController ::urlForRedirect($linkId);
+
+    return redirect($url);
 });

@@ -21,7 +21,7 @@ class Offer extends Model
     {
         return $this->belongsTo(User::class, 'advertiser_id');
     }
-    public function links() //offers на которые подписался мастер
+    public function links() 
     {
         return $this->hasMany(Link::class, 'offer_id');
     }

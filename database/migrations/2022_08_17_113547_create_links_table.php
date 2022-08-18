@@ -21,6 +21,7 @@ class CreateLinksTable extends Migration
             $table->foreignId('offer_id');
             $table->string('url')->nullable();
             $table->integer('transitions')->default(0);
+            $table->integer('fail_transitions')->default(0);
 
         });
     }

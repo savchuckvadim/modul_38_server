@@ -6,6 +6,7 @@ use App\Models\Link;
 use App\Models\Offer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class LinkController extends Controller
 {
@@ -31,10 +32,11 @@ class LinkController extends Controller
             $link->master_id = $advertiserId;
             $link->offer_id = $offerId;
             $link->transitions = 0;
-           
+
             $link->url = url('/link');
             $link->save();
-            $link->url = url("/link/{$link->id}");
+            $hashId = $link->id;
+            $link->url = url("/link/{$hashId}");
             $link->save();
             return response([
                 'resultCode' => 1,
@@ -42,5 +44,18 @@ class LinkController extends Controller
 
             ]);
         }
+    }
+    public static function urlForRedirect($linkId)
+    {
+        $link = Link::find($linkId);
+        $offer = $link->offer;
+        $followers = $offer->followers;
+        $follower = $followers->where('master_id', $link->master_id)->first();
+        if($follower){
+            $link->transitions += 1;
+        }else{
+            $link->fail_transitions += 1;
+        }
+        return $offer->url;
     }
 }
