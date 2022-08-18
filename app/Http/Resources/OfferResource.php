@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Link;
 use App\Models\OfferMaster;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
@@ -18,14 +19,21 @@ class OfferResource extends JsonResource
     {
         // return parent::toArray($request);
         $authUser = Auth::user();
-
-        $findFollow = OfferMaster::where('master_id', $authUser->id)->where('offer_id', $this->id)->first();
-       
         $isFollowing = 0;
-        if($findFollow ){
-            $isFollowing = 1;
+        $link = null;
+        if ($authUser->role_id === 1 || $authUser->role_id === 2 || $authUser->role_id === 3) {
+            $findFollow = OfferMaster::where('master_id', $authUser->id)->where('offer_id', $this->id)->first();
+            $findLink = Link::where('master_id', $authUser->id)->where('offer_id', $this->id)->first();
+
+            if ($findFollow) {
+                $isFollowing = 1;
+            }
+            if ($findLink) {
+                $link = $findLink->url;
+            }
         }
-        
+
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -37,7 +45,8 @@ class OfferResource extends JsonResource
             'advertiser' => $this->advertiser,
             'created_at' => $this->created_at,
             'isFollowing' => $isFollowing,
-            'links' => $this->links()
+            'links' => $this->links(),
+            'link' => $link
         ];
     }
 

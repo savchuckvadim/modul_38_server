@@ -19,7 +19,7 @@ class OfferCollection extends ResourceCollection
         return [
             'resultCode' => 1,
             'totalCount' =>  $this->collection->count(),
-            'data' => $this->collection,
+            'offers' => $this->collection,
 
         ];
     }

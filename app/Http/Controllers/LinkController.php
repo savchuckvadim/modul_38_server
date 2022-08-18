@@ -17,6 +17,7 @@ class LinkController extends Controller
 
         $checkLink = Link::where('advertiser_id', $advertiserId) //проверяем не сущестует ли уже ссылка такая
             ->where('master_id', $authUserId)
+            ->where('offer_id', $offerId)
             ->first();
         if ($checkLink) {
             return response([
@@ -33,7 +34,7 @@ class LinkController extends Controller
            
             $link->url = url('/link');
             $link->save();
-            $link->url = url('/link{$link->id}');
+            $link->url = url("/link/{$link->id}");
             $link->save();
             return response([
                 'resultCode' => 1,
