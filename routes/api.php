@@ -118,7 +118,6 @@ Route::get('/link/{offerId}', function ($offerId) {
 
 
 
-
 Route::post('/sanctum/token', TokenController::class);
 
 

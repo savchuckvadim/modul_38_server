@@ -51,11 +51,13 @@ class LinkController extends Controller
         $offer = $link->offer;
         $followers = $offer->followers;
         $follower = $followers->where('master_id', $link->master_id)->first();
-        if($follower){
+        if ($follower) {
             $link->transitions += 1;
-        }else{
+        } else {
             $link->fail_transitions += 1;
         }
+        $link->save();
         return $offer->url;
     }
+    
 }
