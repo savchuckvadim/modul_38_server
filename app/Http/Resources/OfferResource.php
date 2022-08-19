@@ -46,7 +46,8 @@ class OfferResource extends JsonResource
             'created_at' => $this->created_at,
             'isFollowing' => $isFollowing,
             'links' => $this->links(),
-            'link' => $link
+            'link' => $link,
+            'transitions' => $this->transitions()
         ];
     }
 
