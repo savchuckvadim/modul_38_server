@@ -51,29 +51,32 @@ Route::middleware(['auth:sanctum'])->group(function () {
     return new UserRecource(User::findOrFail($id));
   });
 
- 
+
+
+
+
 });
+
 Route::get('/user/auth', function () {
-    
-  $authUser = Auth::user();
- 
-  // $id = $auth->id;
-  $userResource = null;
-  if ($authUser) {
-    $userResource = new UserRecource($authUser);
+
+    $authUser = Auth::user();
+
+    // $id = $auth->id;
+    $userResource = null;
+    if ($authUser) {
+      $userResource = new UserRecource($authUser);
+      return response([
+        'resultCode' => 1,
+        'authUser' => $userResource
+      ], 200);
+    }
+
+
     return response([
-      'resultCode' => 1,
-      'authUser' => $userResource
+      'resultCode' => 8,
+      'authUser' => $authUser
     ], 200);
-  }
-
-
-  return response([
-    'resultCode' => 0,
-    'authUser' => null
-  ], 200);
-});
-
+  });
 
 
 
@@ -98,20 +101,30 @@ Route::delete('/offers/{offerId}', function ($offerId) {
 
 Route::post('/follow', function (Request $request) {
 
- 
+
   return  OfferMasterController::follow($request);
 });
 Route::delete('/follow/{offerId}', function ($offerId) {
 
- 
+
   return  OfferMasterController::unfollow($offerId);
 });
 
 Route::get('/link/{offerId}', function ($offerId) {
 
- 
+
   return  LinkController::create($offerId);
 });
+
+
+///////////////FINANCE
+Route::get('/finance', function ($offerId) {
+
+
+    return  LinkController::create($offerId);
+  });
+
+
 
 
 
