@@ -7,6 +7,7 @@ use App\Http\Controllers\OfferMasterController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TokenController;
+use App\Http\Controllers\UserController;
 use App\Http\Resources\PostCollection;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\UserCollection;
@@ -118,10 +119,10 @@ Route::get('/link/{offerId}', function ($offerId) {
 
 
 ///////////////FINANCE
-Route::get('/finance', function ($offerId) {
+Route::get('/finance', function() {
 
 
-    return  LinkController::create($offerId);
+    return  UserController::getFinance();
   });
 
 

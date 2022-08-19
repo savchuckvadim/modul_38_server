@@ -15,7 +15,7 @@ class UserController extends Controller
         $offers = Offer::all();
             $offersCount = $offers->count();
         $finance = [];
-        if($user->role == 1){ //Admin
+        if($user->role_id == 1){ //Admin
 
             $links = 0;
             $transitions = 0;
@@ -38,7 +38,7 @@ class UserController extends Controller
 
 
 
-        }else if($user->role == 2){ //Advertiser
+        }else if($user->role_id == 2){ //Advertiser
 
             $masters = 0;
             $transitions = 0;
@@ -57,7 +57,7 @@ class UserController extends Controller
             ];
 
 
-        }else if($user->role == 3){//Master
+        }else if($user->role_id == 3){//Master
             $offers = $user->offers;
             $offersCount = $offers->count();
             $transitions = 0;
