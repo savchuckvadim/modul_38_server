@@ -17,7 +17,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-  
+
     protected $fillable = [
         'name',
         'surname',
@@ -51,17 +51,21 @@ class User extends Authenticatable
         $url = "https://www.gravatar.com/avatar/" . $hash . "?d=robohash";
         return $url;
     }
-   
+
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+    public function offers()
+    {
+        return $this->belongsToMany(Offer::class, 'offer_master');
     }
 
     public function mastersLinks() //offers на которые подписался мастер
     {
         return $this->hasMany(Link::class, 'master_id');
     }
-    
+
     public function advertisersLinks() //offers на которые подписался мастер
     {
         return $this->hasMany(Link::class, 'advertiser_id');

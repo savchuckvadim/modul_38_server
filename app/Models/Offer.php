@@ -12,14 +12,15 @@ class Offer extends Model
 
 
 
-    public function followers()
-    {
-        return $this->hasMany(OfferMaster::class, 'offer_id');
-    }
+   
 
     public function advertiser()
     {
         return $this->belongsTo(User::class, 'advertiser_id');
+    }
+    public function followers()
+    {
+        return $this->hasMany(User::class, 'offer_id');
     }
     public function links()
     {
