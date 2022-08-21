@@ -74,7 +74,7 @@ Route::get('/user/auth', function () {
 
 
     return response([
-      'resultCode' => 8,
+      'resultCode' => 0,
       'authUser' => $authUser
     ], 200);
   });
@@ -116,6 +116,7 @@ Route::get('/link/{offerId}', function ($offerId) {
 
   return  LinkController::create($offerId);
 });
+
 
 
 ///////////////FINANCE

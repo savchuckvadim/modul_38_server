@@ -13,12 +13,12 @@ class LinkController extends Controller
     public static function create($offerId)
     {
         $authUserId = Auth::user()->id;
-        $offer = Offer::where('id', $offerId)->first();
+        $offer = Offer::find($offerId);
+       if($offer){
         $advertiserId = $offer->advertiser->id;
 
-        $checkLink = Link::where('advertiser_id', $advertiserId) //проверяем не сущестует ли уже ссылка такая
+        $checkLink = Link::where('offer_id', $offerId)  //проверяем не сущестует ли уже ссылка такая
             ->where('master_id', $authUserId)
-            ->where('offer_id', $offerId)
             ->first();
         if ($checkLink) {
             return response([
@@ -29,7 +29,7 @@ class LinkController extends Controller
         } else {
             $link = new Link();
             $link->advertiser_id = $advertiserId;
-            $link->master_id = $advertiserId;
+            $link->master_id = $authUserId;
             $link->offer_id = $offerId;
             $link->transitions = 0;
 
@@ -44,13 +44,20 @@ class LinkController extends Controller
 
             ]);
         }
+       }else{
+        return response([
+            'resultCode' => 0,
+            'message' => 'Offer not found!'
+
+        ]);
+       }
     }
     public static function urlForRedirect($linkId)
     {
         $link = Link::find($linkId);
         $offer = $link->offer;
         $followers = $offer->followers;
-        $follower = $followers->where('master_id', $link->master_id)->first();
+        $follower = $follower = $followers->find($link->master_id);
         if ($follower) {
             $link->transitions += 1;
         } else {
@@ -59,5 +66,9 @@ class LinkController extends Controller
         $link->save();
         return $offer->url;
     }
-    
+
+
+
+
+
 }

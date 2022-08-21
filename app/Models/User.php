@@ -58,7 +58,7 @@ class User extends Authenticatable
     }
     public function offers()
     {
-        return $this->belongsToMany(Offer::class, 'offer_master');
+        return $this->belongsToMany(Offer::class, 'offer_masters', 'master_id', 'offer_id');
     }
 
     public function mastersLinks() //offers на которые подписался мастер

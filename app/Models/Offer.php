@@ -12,7 +12,7 @@ class Offer extends Model
 
 
 
-   
+
 
     public function advertiser()
     {
@@ -20,7 +20,7 @@ class Offer extends Model
     }
     public function followers()
     {
-        return $this->hasMany(User::class, 'offer_id');
+        return $this->belongsToMany(User::class, 'offer_masters', 'offer_id', 'master_id' );
     }
     public function links()
     {
@@ -29,15 +29,19 @@ class Offer extends Model
     public function transitions()
     {
         $transitions = 0;
-        foreach ($this->links as $link) {
-            $transitions = $transitions + $link->transitions;
-        }
-
         $failTransitions = 0;
-        foreach ($this->links as $link) {
-            $failTransitions = $failTransitions + $link->fail_transitions;
-        }
 
+        if($this->links){
+            foreach ($this->links as $link) {
+                $transitions = $transitions + $link->transitions;
+            }
+
+
+            foreach ($this->links as $link) {
+                $failTransitions = $failTransitions + $link->fail_transitions;
+            }
+
+        }
         return [
             'transitions' => $transitions,
             'failTransitions' => $failTransitions

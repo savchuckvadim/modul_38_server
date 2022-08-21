@@ -20,32 +20,49 @@ class OfferResource extends JsonResource
         // return parent::toArray($request);
         $authUser = Auth::user();
         $isFollowing = 0;
+        $followersCount = 0;
         $link = null;
-        if ($authUser->role_id === 1 || $authUser->role_id === 2 || $authUser->role_id === 3) {
-            $findFollow = OfferMaster::where('master_id', $authUser->id)->where('offer_id', $this->id)->first();
-            $findLink = Link::where('master_id', $authUser->id)->where('offer_id', $this->id)->first();
+        $url = null;
+        $followers = $this->followers;
+        $linksCount = $this->links->count();
 
-            if ($findFollow) {
-                $isFollowing = 1;
-            }
-            if ($findLink) {
-                $link = $findLink->url;
+
+        if ($followers->count()) {
+            $followersCount = $followers->count();
+
+            $isFollowing = 1;
+
+        }
+
+
+        if ($authUser->role_id === 1 || $authUser->role_id === 2 ) {
+
+            $url = $this->url;
+        }else if ($authUser->role_id === 3) { //if Master
+            if ($linksCount) {
+                $link = $this->links->where('master_id', $authUser->id)
+                ->where('offer_id', $this->id)->first();
+                if($link){
+                    $link = $link->url;
+                }
+
             }
         }
+        $url = $this->url;
 
 
         return [
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'url' => $this->url,
+            'url' =>$url,
             'price' => $this->price,
             'mastersProfit' => $this->mastersProfit,
-            'followers' => $this->followers->count(),
+            'followers' => $followersCount,
             'advertiser' => $this->advertiser,
             'created_at' => $this->created_at,
             'isFollowing' => $isFollowing,
-            'links' => $this->links(),
+            'links' => $linksCount,
             'link' => $link,
             'transitions' => $this->transitions()
         ];
