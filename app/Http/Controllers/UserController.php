@@ -15,6 +15,7 @@ class UserController extends Controller
         $offers = Offer::all();
             $offersCount = $offers->count();
         $finance = [];
+
         if($user->role_id == 1){ //Admin
 
             $links = 0;
@@ -60,23 +61,32 @@ class UserController extends Controller
         }else if($user->role_id == 3){//Master
             $offers = $user->offers;
             $offersCount = $offers->count();
-            $transitions = 0;
+
             $profit = 0;
-
+$links = [];
             foreach($offers as $offer){
-                $transitions += $offer->transitions()['transitions'];  //Transitions
-                $profit += $offer->mastersProfit; //Expenses
-            }
-            $finance = [
-                'offers' => $offersCount,
-                'transitions' => $transitions,
-                'profit' => round($profit, 2),
+                $link = $offer->links->where('master_id', $user->id)->first();
+                if($link){
+                    $transitions = $link->transitions;
+                    $totalProfit = $transitions * $offer->mastersProfit;
+                    $result = [
+                        'name' => $offer->name,
+                        'transitions' => $transitions,
+                        'profit' => $offer->mastersProfit,
+                        'totalProfit' => $totalProfit,
+                        'created_at' => $link->created_at
+                    ];
+                    array_push($links, $result);
 
-              ];
+                }
+                $profit += $offer->mastersProfit;
+            }
+            $finance = $links;
         }
 
         return response([
             'resultCode' => 1,
+            'role' =>  $user->role->name,
             'finance' => $finance,
         ]);
     }

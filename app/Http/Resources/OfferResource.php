@@ -33,9 +33,9 @@ class OfferResource extends JsonResource
             $url = $this->url;
 
 
-            
-        }else if ($authUser->role_id === 3) { //if Master
 
+        }else if ($authUser->role_id === 3) { //if Master
+         
             if ($followers->count()) {
                 $finIsFollow = $followers->find($authUser->id);
                 if($finIsFollow){
@@ -51,7 +51,7 @@ class OfferResource extends JsonResource
 
             }
         }
-        $url = $this->url;
+
 
 
         return [
