@@ -20,25 +20,28 @@ class OfferResource extends JsonResource
         // return parent::toArray($request);
         $authUser = Auth::user();
         $isFollowing = 0;
-        $followersCount = 0;
+
         $link = null;
         $url = null;
+
         $followers = $this->followers;
+        $followersCount = $followers->count();
         $linksCount = $this->links->count();
 
 
-        if ($followers->count()) {
-            $followersCount = $followers->count();
-
-            $isFollowing = 1;
-
-        }
-
-
         if ($authUser->role_id === 1 || $authUser->role_id === 2 ) {
-
             $url = $this->url;
+
+
+            
         }else if ($authUser->role_id === 3) { //if Master
+
+            if ($followers->count()) {
+                $finIsFollow = $followers->find($authUser->id);
+                if($finIsFollow){
+                    $isFollowing = 1;
+                }
+            }
             if ($linksCount) {
                 $link = $this->links->where('master_id', $authUser->id)
                 ->where('offer_id', $this->id)->first();
