@@ -73,7 +73,7 @@ $links = [];
                         'name' => $offer->name,
                         'transitions' => $transitions,
                         'profit' => $offer->mastersProfit,
-                        'totalProfit' => $totalProfit,
+                        'totalProfit' => round($totalProfit, 2),
                         'created_at' => $link->created_at
                     ];
                     array_push($links, $result);
