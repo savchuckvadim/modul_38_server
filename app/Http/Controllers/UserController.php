@@ -16,7 +16,6 @@ class UserController extends Controller
 
         $user = Auth::user();
 
-
         if ($user->role_id == 1) { //Admin
             $finance = User::adminsFinance();
         } else if ($user->role_id == 2) { //Advertiser
