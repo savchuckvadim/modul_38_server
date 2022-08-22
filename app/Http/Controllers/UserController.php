@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Link;
 use App\Models\Offer;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -14,47 +15,12 @@ class UserController extends Controller
     {
 
         $user = Auth::user();
-        $offers = Offer::all();
-        $offersCount = $offers->count();
-        $finance = [];
+
 
         if ($user->role_id == 1) { //Admin
-
-            $links = 0;
-            $transitions = 0;
-            $failTransitions = 0;
-            $profit = 0;
-
-            foreach ($offers as $offer) {
-
-                $links += $offer->links->count();
-                $transitions += $offer->transitions()['transitions'];
-                $failTransitions += $offer->transitions()['failTransitions'];
-                $profit += $offer->appsProfit;
-            }
-            $finance = [
-                'links' => $links,
-                'transitions' => $transitions,
-                'failTransitions' => $failTransitions,
-                'profit' => round($profit, 2),
-            ];
+            $finance = User::adminsFinance();
         } else if ($user->role_id == 2) { //Advertiser
-
-            $masters = 0;
-            $transitions = 0;
-            $expenses = 0;
-
-            foreach ($offers as $offer) {
-                $masters += $offer->followers->count(); //Msters Count
-                $transitions += $offer->transitions()['transitions'];  //Transitions
-                $expenses += $offer->price; //Expenses
-            }
-            $finance = [
-                'offers' => $offersCount,
-                'masters' => $masters,
-                'transitions' => $transitions,
-                'expenses' => $expenses,
-            ];
+            $finance =  User::advertFinance();
         } else if ($user->role_id == 3) { //Master
             $finance = User::mastersFinance();
         }
@@ -65,6 +31,4 @@ class UserController extends Controller
             'finance' => $finance,
         ]);
     }
-
-    
 }
