@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -80,27 +81,55 @@ class User extends Authenticatable
     }
 
 
+    public static function mastersFinance()
+    {
+        $user = Auth::user();
+        $offers = $user->offers;
+        $offersCount = $offers->count();
 
-    // public function profile()
-    // {
-    //     return $this->hasOne(Profile::class, 'user_id');
-    // }
+        $totalLinks = $offersCount;
+        $totalTransitions = 0;
 
-    // public function followeds()
-    // {
-    //     return $this->belongsToMany(User::class, 'followers', 'user_id', 'followed_id');
-    // }
-    // public function followers()
-    // {
+        $totalProfit = 0;
+        $profit = 0;
 
-    //     return $this->belongsToMany(User::class, 'followers', 'followed_id', 'user_id');
-    // }
-    // public function posts()
-    // {
-    //     return $this->hasMany(Post::class, 'author_id');
-    // }
+        $links = [];
+        foreach ($offers as $offer) {
+            $link = $offer->links->where('master_id', $user->id)->first();
+            if ($link) {
 
+                $transitions = $link->transitions;
+                $totalTransitions += $transitions;
 
+                $profitFromLinkTransitions = $transitions * $offer->mastersProfit;
+                $profit += $offer->mastersProfit;
+                $totalProfit += $profitFromLinkTransitions;
+
+                $link = [
+                    'name' => $offer->name,
+                    'transitions' => $transitions,
+                    'price' => round($offer->mastersProfit, 2),
+                    'profit' => round($profitFromLinkTransitions, 2),
+                    'created_at' => $link->created_at
+                ];
+                array_push($links, $link);
+            }
+        }
+        $total = [
+            'totalLinks' => $totalLinks,
+            'transitions' => $totalTransitions,
+            'profit' => $profit,
+            'totalProfit' => $totalProfit,
+            'created_at' => null
+
+        ];
+        $finance = [
+            'items' => $links,
+            'total' => $total
+
+        ];
+        return $finance;
+    }
 
     protected static function booted()
     {
