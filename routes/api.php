@@ -48,8 +48,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
 
-  Route::get('/users/{id}', function ($id) {
-    return new UserRecource(User::findOrFail($id));
+  Route::delete('/users/{userId}', function ($userId) {
+    return UserController::deleteUser($userId);
   });
 
   Route::post('/users/add', function (Request $request) {

@@ -63,7 +63,7 @@ class UserController extends Controller
             'role' => $request->role,
         ];
         $userCreating = new CreateNewUser;
-            $user = $userCreating->create($input);
+        $user = $userCreating->create($input);
         // $user = new User;
         // $user->name = $request->name;
         // $user->surname = $request->surname;
@@ -75,5 +75,22 @@ class UserController extends Controller
             'resultCode' => 1,
             'createdUser' => $user
         ]);
+    }
+
+    public static function deleteUser($userId)
+    {
+        $user = User::find($userId);
+        if ($user) {
+            $user->delete();
+            return response([
+                'resultCode' => 1,
+                'message' => 'user ' . $userId . ' was deleted'
+            ]);
+        } else {
+            return response([
+                'resultCode' => 0,
+                'message' => 'user ' . $userId . ' was not found'
+            ]);
+        }
     }
 }
