@@ -51,8 +51,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
   Route::get('/users/{id}', function ($id) {
     return new UserRecource(User::findOrFail($id));
   });
+
+  Route::post('/users/add', function (Request $request) {
+    return UserController::addUser($request);
+  });
 });
 
+
+//Users
 Route::get('/user/auth', function () {
   return UserController::getAuthUser();
 });
@@ -109,7 +115,7 @@ Route::get('/finance', function () {
 
 
 
-
+//
 
 Route::post('/sanctum/token', TokenController::class);
 

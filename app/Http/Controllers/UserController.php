@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Fortify\CreateNewUser;
 use App\Http\Resources\UserRecource;
 use App\Models\Link;
 use App\Models\Offer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -31,21 +33,47 @@ class UserController extends Controller
             'finance' => $finance,
         ]);
     }
-    public static function getAuthUser(){
+    public static function getAuthUser()
+    {
         $authUser = Auth::user();
         $userResource = null;
         if ($authUser) {
-          $userResource = new UserRecource($authUser);
-          return response([
-            'resultCode' => 1,
-            'authUser' => $userResource
-          ], 200);
+            $userResource = new UserRecource($authUser);
+            return response([
+                'resultCode' => 1,
+                'authUser' => $userResource
+            ], 200);
         }
-    
-    
+
+
         return response([
-          'resultCode' => 0,
-          'authUser' => $authUser
+            'resultCode' => 0,
+            'authUser' => $authUser
         ], 200);
+    }
+
+    public static function addUser($request)
+    {
+        $input = [
+            'name' => $request->name,
+            'surname' => $request->surname,
+            'email' => $request->email,
+            'password' => $request->password,
+            'password_confirmation' => $request->password_confirmation,
+            'role' => $request->role,
+        ];
+        $userCreating = new CreateNewUser;
+            $user = $userCreating->create($input);
+        // $user = new User;
+        // $user->name = $request->name;
+        // $user->surname = $request->surname;
+        // $user->email = $request->email;
+        // $user->password  = Hash::make($request->password);
+        // $user->role_id = $request->role;
+        // $user->save();
+        return response([
+            'resultCode' => 1,
+            'createdUser' => $user
+        ]);
     }
 }
