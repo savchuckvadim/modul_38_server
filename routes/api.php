@@ -51,33 +51,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
   Route::get('/users/{id}', function ($id) {
     return new UserRecource(User::findOrFail($id));
   });
-
-
-
-
-
 });
 
 Route::get('/user/auth', function () {
-
-    $authUser = Auth::user();
-
-    // $id = $auth->id;
-    $userResource = null;
-    if ($authUser) {
-      $userResource = new UserRecource($authUser);
-      return response([
-        'resultCode' => 1,
-        'authUser' => $userResource
-      ], 200);
-    }
-
-
-    return response([
-      'resultCode' => 0,
-      'authUser' => $authUser
-    ], 200);
-  });
+  return UserController::getAuthUser();
+});
 
 
 
@@ -120,11 +98,11 @@ Route::get('/link/{offerId}', function ($offerId) {
 
 
 ///////////////FINANCE
-Route::get('/finance', function() {
+Route::get('/finance', function () {
 
 
-    return  UserController::getFinance();
-  });
+  return  UserController::getFinance();
+});
 
 
 

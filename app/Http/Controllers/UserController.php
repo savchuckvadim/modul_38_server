@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserRecource;
 use App\Models\Link;
 use App\Models\Offer;
 use App\Models\User;
@@ -29,5 +30,22 @@ class UserController extends Controller
             'role' =>  $user->role->name,
             'finance' => $finance,
         ]);
+    }
+    public static function getAuthUser(){
+        $authUser = Auth::user();
+        $userResource = null;
+        if ($authUser) {
+          $userResource = new UserRecource($authUser);
+          return response([
+            'resultCode' => 1,
+            'authUser' => $userResource
+          ], 200);
+        }
+    
+    
+        return response([
+          'resultCode' => 0,
+          'authUser' => $authUser
+        ], 200);
     }
 }
