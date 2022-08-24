@@ -92,7 +92,7 @@ class User extends Authenticatable
         $totalTransitions = 0;
         $totalProfit = 0;
         $profit = 0;
-        $links = [];
+        $links = $user->mastersLinks;
         $mastersLinks = $user->mastersLinks;
         if ($date) {
             if ($date == 1) {
@@ -102,9 +102,7 @@ class User extends Authenticatable
             } else if ($date == 3) {
                 $links = $mastersLinks->whereYear('updated_at', now()->year)->get();
             }
-        } else {
-            $links = $user->mastersLinks;
-        }
+        } 
 
 
 
