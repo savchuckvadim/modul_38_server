@@ -100,7 +100,7 @@ class User extends Authenticatable
             } else if ($date == 2) {
                 $links = Link::where('master_id', $user->id)->whereMonth('updated_at', now()->month)->get();
             } else if ($date == 3) {
-                $links = $mastersLinks->whereYear('updated_at', now()->year)->get();
+                $links = Link::where('master_id', $user->id)->whereYear('updated_at', now()->year)->get();
             }
         } 
 
@@ -199,14 +199,20 @@ class User extends Authenticatable
         ];
         return $finance;
     }
-    public static function adminsFinance()
+    public static function adminsFinance($date)
     {
         $items = [];
         $links = Link::all();
         $linksCount = $links->count();
-        $offers = Offer::all();
-        $offersCount = $offers->count();
-
+        if ($date) {
+            if ($date == 1) {
+                $links = Link::whereDay('created_at', now()->day)->get();
+            } else if ($date == 2) {
+                $links = Link::whereMonth('created_at', now()->month)->get();
+            } else if ($date == 3) {
+                $links = Link::whereYear('created_at', now()->year)->get();
+            }
+        }
         $totalPrice = 0;
         $totalTransitions = 0;
         $totalFailTransitions = 0;
@@ -225,11 +231,12 @@ class User extends Authenticatable
             $totalProfit += $profit;
 
             $item = [
-                'offerName' => $link->offer->name,
+                'created' => $link->created_at,
                 'link' => $link->url,
+                'offerName' => $link->offer->name,     
                 'price' => round($price, 2),
                 'transitions' => $transitions,
-                'fail_transitions' => $failTransitions,
+                'fails' => $failTransitions,
                 'profit' => round($profit, 2)
             ];
 
@@ -237,8 +244,9 @@ class User extends Authenticatable
         }
 
         $total = [
-            'offerName' => $offersCount,
-            'link' => $linksCount,
+            'created' => '',
+            'link' => 'Total Links: '.$linksCount,
+            'offer' => '',           
             'price' => round($totalPrice, 2),
             'transitions' => $totalTransitions,
             'fail_transitions' =>  $totalFailTransitions,
