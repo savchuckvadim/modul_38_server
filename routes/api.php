@@ -103,7 +103,7 @@ Route::get('/link/{offerId}', function ($offerId) {
 
 ///////////////FINANCE
 Route::get('/finance/{date}', function ($date) {
-  return  UserController::getFinance();
+  return  UserController::getFinance($date);
 });
 
 

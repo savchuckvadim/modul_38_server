@@ -14,17 +14,17 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
 
-    public static function getFinance()
+    public static function getFinance($date)
     {
 
         $user = Auth::user();
 
         if ($user->role_id == 1) { //Admin
-            $finance = User::adminsFinance();
+            $finance = User::adminsFinance($date);
         } else if ($user->role_id == 2) { //Advertiser
-            $finance =  User::advertFinance();
+            $finance =  User::advertFinance($date);
         } else if ($user->role_id == 3) { //Master
-            $finance = User::mastersFinance();
+            $finance = User::mastersFinance($date);
         }
 
         return response([

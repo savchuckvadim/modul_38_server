@@ -81,35 +81,47 @@ class User extends Authenticatable
     }
 
 
-    public static function mastersFinance()
+    public static function mastersFinance($date)
     {
         $items = [];
         $user = Auth::user();
-        $offers = $user->offers;
-        $offersCount = $offers->count();
+        // $offers = $user->offers;
+        // $offersCount = $offers->count();
 
-        $totalLinks = $offersCount;
+        // $totalLinks = $offersCount;
         $totalTransitions = 0;
-
         $totalProfit = 0;
         $profit = 0;
+        $links = [];
+        $mastersLinks = $user->mastersLinks;
+        if ($date) {
+            if ($date == 1) {
+                $links = Link::where('master_id', $user->id)->whereDay('updated_at', now()->day)->get();
+            } else if ($date == 2) {
+                $links = Link::where('master_id', $user->id)->whereMonth('updated_at', now()->month)->get();
+            } else if ($date == 3) {
+                $links = $mastersLinks->whereYear('updated_at', now()->year)->get();
+            }
+        } else {
+            $links = $user->mastersLinks;
+        }
 
-        $links = $user->mastersLinks;
 
-        foreach ($links as $link){
+
+        foreach ($links as $link) {
             $offer = $link->offer;
             $transitions = $link->transitions;
-            
-            if($transitions == 0){
+
+            if ($transitions == 0) {
                 $isFollowing = $offer->followers->find($user->id);
-                if(!$isFollowing){
+                if (!$isFollowing) {
                     continue;
                 }
             }
 
             $totalTransitions += $transitions;
 
-           
+
             $profitFromLinkTransitions = $transitions * $offer->mastersProfit;
             $profit += $offer->mastersProfit;
             $totalProfit += $profitFromLinkTransitions;
@@ -122,10 +134,9 @@ class User extends Authenticatable
                 'activity' => $link->updated_at
             ];
             array_push($items, $financeItem);
-           
         }
         $total = [
-            'totalLinks' => 'Total: '.count($items),
+            'totalLinks' => 'Total: ' . count($items),
             'transitions' => $totalTransitions,
             'profit' => round($profit, 2),
             'totalProfit' => round($totalProfit, 2),
