@@ -90,8 +90,6 @@ Route::post('/follow', function (Request $request) {
   return  OfferMasterController::follow($request);
 });
 Route::delete('/follow/{offerId}', function ($offerId) {
-
-
   return  OfferMasterController::unfollow($offerId);
 });
 
@@ -104,9 +102,7 @@ Route::get('/link/{offerId}', function ($offerId) {
 
 
 ///////////////FINANCE
-Route::get('/finance', function () {
-
-
+Route::get('/finance/{date}', function ($date) {
   return  UserController::getFinance();
 });
 
