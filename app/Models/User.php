@@ -85,15 +85,12 @@ class User extends Authenticatable
     {
         $items = [];
         $user = Auth::user();
-        // $offers = $user->offers;
-        // $offersCount = $offers->count();
-
-        // $totalLinks = $offersCount;
+    
         $totalTransitions = 0;
         $totalProfit = 0;
         $profit = 0;
         $links = $user->mastersLinks;
-        $mastersLinks = $user->mastersLinks;
+       
         if ($date) {
             if ($date == 1) {
                 $links = Link::where('master_id', $user->id)->whereDay('updated_at', now()->day)->get();
@@ -148,13 +145,22 @@ class User extends Authenticatable
         ];
         return $finance;
     }
-    public static function advertFinance()
+    public static function advertFinance($date)
     {
         $items = [];
         $user = Auth::user();
         $offers = $user->createdOffers;
-        //  Offer::where('advertiser_id', $user->id);
+        if ($date) {
+            if ($date == 1) {
+                $offers = Offer::where('advertiser_id', $user->id)->whereDay('updated_at', now()->day)->get();
+            } else if ($date == 2) {
+                $offers = Offer::where('advertiser_id', $user->id)->whereMonth('updated_at', now()->month)->get();
+            } else if ($date == 3) {
+                $offers = Offer::where('advertiser_id', $user->id)->whereYear('updated_at', now()->year)->get();
+            }
+        }
         $offersCount = $offers->count();
+
         $totalMasters = 0;
         $totalTransitions = 0;
         $totalExpenses = 0;
@@ -164,12 +170,12 @@ class User extends Authenticatable
             $transitions = 0;
             $expenses = 0;
             $masters = $offer->followers->count();
-            if ($masters) {
+            // if ($masters) {
                 if ($offer->transitions()['transitions']) {
                     $transitions = $offer->transitions()['transitions'];
                     $expenses = $transitions * $offer->price;
                 }
-            }
+            // }
 
 
 
@@ -178,6 +184,7 @@ class User extends Authenticatable
             $totalExpenses += $expenses;
             $item = [
                 'offer' => $offer->name,
+                'created' => $offer->created_at,
                 'followers' => $masters,
                 'transitions' => $transitions,
                 'price' => round($offer->price, 2),
@@ -187,13 +194,14 @@ class User extends Authenticatable
         }
         $total = [
             'offers' => 'Total Offers: ' . $offersCount,
+            'created' => '',
             'followers' => $totalMasters,
             'transitions' => $totalTransitions,
             'price' => null,
             'expenses' => $totalExpenses,
         ];
         $finance = [
-            'items' => $items,
+            'items' => array_reverse($items),
             'total' => $total
 
         ];

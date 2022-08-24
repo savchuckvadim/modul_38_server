@@ -31,16 +31,14 @@ class OfferController extends Controller
         return $result;
     }
 
-    public static function getOffer($userId)
+    public static function getOffers()
     {
-        $authUser = Auth::user();
-        $user = User::findOrFail($userId);
-
-        if ($user->role->id == 2) {
+        // $user = User::findOrFail($userId);
+        $user = Auth::user();
+        if ($user->role->id == 2) { //advertiser
             $offers = $user->createdOffers;
-
             return new OfferCollection($offers);
-        } else if ($user->role->id == 1 ||  $user->role->id == 3) {
+        } else if ($user->role->id == 1 ||  $user->role->id == 3) { //admin and master
             $offers = Offer::all();
             return new OfferCollection($offers);
         } else {
