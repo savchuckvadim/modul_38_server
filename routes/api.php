@@ -76,8 +76,8 @@ Route::post('/offer', function (Request $request) {
   return OfferController::newOffer($request);
 });
 
-Route::get('/offers/', function () {
-  return OfferController::getOffers();
+Route::get('/offers', function (Request $request) {
+  return OfferController::getOffers($request);
 });
 
 Route::delete('/offers/{offerId}', function ($offerId) {

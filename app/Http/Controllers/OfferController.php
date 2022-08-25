@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Resources\OfferCollection;
 use App\Http\Resources\OfferResource;
 use App\Models\Offer;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,16 +30,21 @@ class OfferController extends Controller
         return $result;
     }
 
-    public static function getOffers()
+    public static function getOffers($request)
     {
         // $user = User::findOrFail($userId);
         $user = Auth::user();
         if ($user->role->id == 2) { //advertiser
             $offers = $user->createdOffers;
             return new OfferCollection($offers);
+
+
         } else if ($user->role->id == 1 ||  $user->role->id == 3) { //admin and master
-            $offers = Offer::all();
-            return new OfferCollection($offers);
+            $itemsCount = $request->query('count');
+            $paginate = Offer::paginate($itemsCount);
+            $collection = new OfferCollection ($paginate);
+        
+            return $collection;
         } else {
             return response([
                 'resultCode' => 0,
