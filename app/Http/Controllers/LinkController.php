@@ -54,6 +54,9 @@ class LinkController extends Controller
     public static function urlForRedirect($linkId)
     {
         $link = Link::find($linkId);
+        if(!$link){
+            return getenv('SPA_URL').'/notfound';
+        }
         $offer = $link->offer;
         $followers = $offer->followers;
         $follower = $followers->find($link->master_id);
@@ -65,7 +68,7 @@ class LinkController extends Controller
         } else {
             $link->fail_transitions += 1;
             $link->save();
-            return getenv('SPA_URL').'/notfound';;
+            return getenv('SPA_URL').'/notfound';
         }
     }
 }
