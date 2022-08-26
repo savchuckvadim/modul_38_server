@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Link;
 use App\Models\Offer;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+
 
 class LinkController extends Controller
 {
@@ -66,7 +65,7 @@ class LinkController extends Controller
         } else {
             $link->fail_transitions += 1;
             $link->save();
-            return getenv('SPA_URL')."/notfound";;
+            return getenv('SPA_URL').'/notfound';;
         }
     }
 }

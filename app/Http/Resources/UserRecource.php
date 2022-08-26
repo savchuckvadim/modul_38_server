@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Auth;
+
 
 class UserRecource extends JsonResource
 {
@@ -23,8 +23,7 @@ class UserRecource extends JsonResource
             'email' => $this->email,
             'role' => $this->role->name,
             'photo' => $this->photo
-            // 'created_at' => $this->created_at,
-            // 'updated_at' => $this->updated_at,
+         
         ];
     }
 

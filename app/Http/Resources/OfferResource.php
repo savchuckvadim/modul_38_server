@@ -2,8 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Link;
-use App\Models\OfferMaster;
+
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,7 +16,7 @@ class OfferResource extends JsonResource
      */
     public function toArray($request)
     {
-        // return parent::toArray($request);
+       
         $authUser = Auth::user();
         $isFollowing = 0;
 

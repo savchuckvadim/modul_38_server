@@ -8,11 +8,7 @@ use App\Models\Offer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-// 'name'
-// 'description'
-// 'url'
-// 'price'
-// tags...
+
 class OfferController extends Controller
 {
     public static function newOffer(Request $request)
@@ -37,6 +33,7 @@ class OfferController extends Controller
         if ($user->role->id == 2) { //advertiser
             $offers = $user->createdOffers;
             return new OfferCollection($offers);
+
         } else if ($user->role->id == 1 ||  $user->role->id == 3) { //admin and master
             $itemsCount = $request->query('count');
             $paginate = Offer::paginate($itemsCount);
@@ -50,6 +47,8 @@ class OfferController extends Controller
             ]);
         }
     }
+
+
     public static function getOffer($offerId)
     {
         $offer = Offer::findOrFail($offerId);

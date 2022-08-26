@@ -4,12 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Actions\Fortify\CreateNewUser;
 use App\Http\Resources\UserRecource;
-use App\Models\Link;
-use App\Models\Offer;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+
 
 class UserController extends Controller
 {
@@ -64,13 +61,8 @@ class UserController extends Controller
         ];
         $userCreating = new CreateNewUser;
         $user = $userCreating->create($input);
-        // $user = new User;
-        // $user->name = $request->name;
-        // $user->surname = $request->surname;
-        // $user->email = $request->email;
-        // $user->password  = Hash::make($request->password);
-        // $user->role_id = $request->role;
-        // $user->save();
+  
+  
         return response([
             'resultCode' => 1,
             'createdUser' => $user

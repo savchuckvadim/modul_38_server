@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Resources\OfferResource;
 use App\Models\Offer;
 use App\Models\OfferMaster;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class OfferMasterController extends Controller
@@ -64,4 +63,6 @@ class OfferMasterController extends Controller
         }
        
     }
+
+    //TODO: delete user...
 }

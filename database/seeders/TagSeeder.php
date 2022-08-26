@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Tag;
-use Database\Factories\TagFactory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
