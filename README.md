@@ -5,14 +5,19 @@ for start dev:
 2) create BD to localhost Apache and change env 
 if required:
 
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=modul_38
-DB_USERNAME=root
-DB_PASSWORD=
+`DB_CONNECTION=mysql`
 
-3) composer install
-4) php artisan migrate:fresh --seed
-5) php artisan serve 
+`DB_HOST=127.0.0.1`
+
+`DB_PORT=3306`
+
+`DB_DATABASE=modul_38`
+
+`DB_USERNAME=root`
+
+`DB_PASSWORD=`
+
+3) `composer install`
+4) `php artisan migrate:fresh --seed`
+5) `php artisan serve` 
 6) project starting on http://127.0.0.1:8000
