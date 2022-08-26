@@ -37,13 +37,11 @@ class OfferController extends Controller
         if ($user->role->id == 2) { //advertiser
             $offers = $user->createdOffers;
             return new OfferCollection($offers);
-
-
         } else if ($user->role->id == 1 ||  $user->role->id == 3) { //admin and master
             $itemsCount = $request->query('count');
             $paginate = Offer::paginate($itemsCount);
-            $collection = new OfferCollection ($paginate);
-        
+            $collection = new OfferCollection($paginate);
+
             return $collection;
         } else {
             return response([
@@ -52,6 +50,24 @@ class OfferController extends Controller
             ]);
         }
     }
+    public static function getOffer($offerId)
+    {
+        $offer = Offer::findOrFail($offerId);
+        if ($offer) {
+            $offerResource =new OfferResource($offer);
+            return response([
+                'resultCode' => 1,
+                'offer' => $offerResource
+            ]);
+        } else {
+            return response([
+                'resultCode' => 0,
+                'message' => 'offer not found'
+            ]);
+        }
+    }
+
+
     public static function deleteOffer($offerId)
     {
         $offer = Offer::findOrFail($offerId);
