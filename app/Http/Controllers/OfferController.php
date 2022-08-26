@@ -33,9 +33,9 @@ class OfferController extends Controller
         if ($user->role->id == 2) { //advertiser
             $offers = $user->createdOffers;
             return new OfferCollection($offers);
-
         } else if ($user->role->id == 1 ||  $user->role->id == 3) { //admin and master
             $itemsCount = $request->query('count');
+            
             $paginate = Offer::paginate($itemsCount);
             $collection = new OfferCollection($paginate);
 
@@ -53,7 +53,7 @@ class OfferController extends Controller
     {
         $offer = Offer::findOrFail($offerId);
         if ($offer) {
-            $offerResource =new OfferResource($offer);
+            $offerResource = new OfferResource($offer);
             return response([
                 'resultCode' => 1,
                 'offer' => $offerResource
