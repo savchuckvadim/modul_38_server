@@ -5,6 +5,7 @@ for start dev:
 2) create BD to localhost Apache and change env :
 
 `DB_CONNECTION=mysql
+
 DB_HOST=127.0.0.1`
 
 `DB_PORT=3306`
@@ -15,15 +16,22 @@ DB_HOST=127.0.0.1`
 
 `DB_PASSWORD=`
 
-3) `composer install`
+3) Install dependences: `composer install`
+
 4) Install Sanctum:
-`composer require laravel/sanctum`
-`php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"`
+
+`composer require laravel/sanctum
+
+php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"`
 
 and change .env
 
-5) Install Fortify
+5) Install Fortify:
 
-4) `php artisan migrate:fresh --seed`
-5) `php artisan serve` 
-6) project starting on http://127.0.0.1:8000
+`composer require laravel/fortify
+
+sail artisan vendor:publish --provider="Laravel\Fortify\FortifyServiceProvider"`
+
+6) `php artisan migrate:fresh --seed`
+7) `php artisan serve` 
+8) project starting on http://127.0.0.1:8000
